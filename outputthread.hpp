@@ -15,6 +15,11 @@ public slots:
 protected:
 	void run();
 	void timerEvent(QTimerEvent *);
+
+private:
+        int bufor[2];
+        int tag;
+        int odbiorca;
 	
 };
 

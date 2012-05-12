@@ -6,6 +6,7 @@
 
 #define TAG_ZAJMOWANIE_ZASOBOW 1
 #define TAG_ZWALNIANIE_ZASOBOW 2
+#define TAG_POTWIERDZENIE_ODBIORU 3
 
 extern int size, rank;
 
