@@ -17,9 +17,10 @@ protected:
 	void timerEvent(QTimerEvent *);
 
 private:
-        int bufor[2];
-        int tag;
-        int odbiorca;
+	int bufor[2];
+	int tag;
+	int odbiorca;
+	void wyslij(int czas,int ileW, int odbiorca, int tag);
 	
 };
 

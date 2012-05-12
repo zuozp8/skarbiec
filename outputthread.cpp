@@ -12,7 +12,7 @@ OutputThread::OutputThread(QObject *parent) :
 
 void OutputThread::timerEvent(QTimerEvent*)
 {
-        int tag  = (qrand()%2?TAG_ZWALNIANIE_ZASOBOW:TAG_ZAJMOWANIE_ZASOBOW);
+	int tag  = (qrand()%2?TAG_ZWALNIANIE_ZASOBOW:TAG_ZAJMOWANIE_ZASOBOW);
 	for (int i=0; i<size; i++) {
 		if (i == rank) continue;
 		int bufor[2];
@@ -26,16 +26,16 @@ void OutputThread::timerEvent(QTimerEvent*)
 
 void OutputThread::wyslij(int czas,int ileW, int odbiorca, int tag)
 {
-        int bufor[2];
-        bufor[0] = czas;
-        bufor[1] = ileW;
-        MPI_Send(bufor, 2, MPI_INT, odbiorca, tag, MPI_COMM_WORLD);
+	int bufor[2];
+	bufor[0] = czas;
+	bufor[1] = ileW;
+	MPI_Send(bufor, 2, MPI_INT, odbiorca, tag, MPI_COMM_WORLD);
 }
 
 
 void OutputThread::run()
 {
 	qsrand(time(0)+100*rank);
-        startTimer(500 + 500*(qrand()%20));
+	startTimer(500 + 500*(qrand()%20));
 	exec();
 }

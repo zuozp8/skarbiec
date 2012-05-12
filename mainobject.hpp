@@ -22,30 +22,30 @@ public:
 	explicit MainObject(QObject *parent = 0);
 
 signals:
-        void wiadomosc(int,int,int,int);
+	void wiadomosc(int,int,int,int);
 	void dostalesWielblady(); //TODO: polancz z odliczaniem do oddania wielbladow
 
 public slots:
 	void dostalWiadomosc();
 	void wyslalem();
 	//void zrabowalemICzekamNaWielblady(int czas, int ile);
-        void skonczylemRabowac();
+	void skonczylemRabowac();
 private:
-        int minimalnyCzasOdbioru();
-        void rabowanie();
-        void przetworzKolejke();
+	int minimalnyCzasOdbioru();
+	void rabowanie();
+	void przetworzKolejke();
 	void zabierzWielblady(int ile);
 	bool sprobujZabracWielblady(int ile);
-        Request utworzRequest(int requestTime, int banditId ,int ile);
-        InputThread* inputThread;
+	Request utworzRequest(int requestTime, int banditId ,int ile);
+	InputThread* inputThread;
 	OutputThread* outputThread;
 	QList<Request> kolejka;
 	unsigned int* czas_odbierania;
 
-        int caloscWielbladow;
-        int potrzebneWielblady;
+	int caloscWielbladow;
+	int potrzebneWielblady;
 	int ileWielbladow;
-        int zegarLamporta;
+	int zegarLamporta;
 };
 
 #endif // MAINOBJECT_HPP
