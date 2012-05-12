@@ -2,7 +2,7 @@
 #define MAINOBJECT_HPP
 
 #include <QObject>
-#include <QSet>
+#include <QList>
 #include <QTimer>
 
 #include "inputthread.hpp"
@@ -39,7 +39,7 @@ private:
         Request utworzRequest(int requestTime, int banditId ,int ile);
         InputThread* inputThread;
 	OutputThread* outputThread;
-	QSet<Request> kolejka;
+	QList<Request> kolejka;
 	unsigned int* czas_odbierania;
 
         int caloscWielbladow;

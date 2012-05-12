@@ -44,7 +44,7 @@ void MainObject::rabowanie()
         potrzebneWielblady =( qrand()%9 + 1)/2;
         zegarLamporta++;
         wiadomosc(zegarLamporta ,potrzebneWielblady ,-1 ,TAG_ZAJMOWANIE_ZASOBOW );
-        kolejka.insert(utworzRequest(zegarLamporta,rank,potrzebneWielblady));
+		kolejka.push_back(utworzRequest(zegarLamporta,rank,potrzebneWielblady));
         przetworzKolejke();
 }
 
@@ -55,12 +55,11 @@ void MainObject::dostalWiadomosc()
         zegarLamporta = qMax(zegarLamporta, inputThread->bufor[0]);
         if(inputThread->status.MPI_TAG == TAG_ZWALNIANIE_ZASOBOW)
         {
-            this->ileWielbladow += inputThread->bufor[1];
-            kolejka.remove(utworzRequest(inputThread->bufor[0],inputThread->status.MPI_SOURCE,inputThread->bufor[1]));
+			this->ileWielbladow += inputThread->bufor[1];
         }
         else if (inputThread->status.MPI_TAG == TAG_ZAJMOWANIE_ZASOBOW)
         {
-            kolejka.insert(utworzRequest(inputThread->bufor[0],inputThread->status.MPI_SOURCE,inputThread->bufor[1]));
+			kolejka.push_back(utworzRequest(inputThread->bufor[0],inputThread->status.MPI_SOURCE,inputThread->bufor[1]));
             zegarLamporta++;
             wiadomosc(zegarLamporta,inputThread->bufor[1],inputThread->status.MPI_SOURCE, TAG_POTWIERDZENIE_ODBIORU);
         }
@@ -70,7 +69,8 @@ void MainObject::dostalWiadomosc()
 
 void MainObject::przetworzKolejke()
 {
-        if( !kolejka.empty() && ileWielbladow >= potrzebneWielblady && minimalnyCzasOdbioru() > kolejka.begin()->requestTime )
+	qSort(kolejka.begin(),kolejka.end());
+		while( !kolejka.empty() && ileWielbladow >= potrzebneWielblady && minimalnyCzasOdbioru() > kolejka.begin()->requestTime )
         {
             ileWielbladow -= kolejka.begin()->ile;
             if(kolejka.begin()->banditId == rank)
