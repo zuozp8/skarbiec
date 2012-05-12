@@ -2,6 +2,7 @@
 #define COMMUNICATIONTHREAD_HPP
 
 #include <QThread>
+#include <mpi/mpi.h>
 
 #define TAG_ZAJMOWANIE_ZASOBOW 1
 #define TAG_ZWALNIANIE_ZASOBOW 2
@@ -13,15 +14,14 @@ class InputThread : public QThread
 	Q_OBJECT
 public:
 	explicit InputThread(QObject *parent = 0);
-	
+	int bufor[2]; //czas, ilosc
+	MPI_Status status;
 signals:
-	void wiadomoscOZwolnieniuZasobow(int czas, int kto, int ile);
-	void wiadomoscOZajeciuZasobow(int czas, int kto, int ile);
 public slots:
+	void listen();
 
 protected:
-	int exec();
-
+	void run();
 };
 
 #endif // COMMUNICATIONTHREAD_HPP

@@ -20,13 +20,13 @@ public:
 	explicit MainObject(QObject *parent = 0);
 
 signals:
-	void dostalesWielblady();
-	void oddalesWielblady();
+	void dostalesWielblady(); //TODO: polancz z odliczaniem do oddania wielbladow
 
 public slots:
-	void wiadomoscOZwolnieniuZasobow(int czas, int kto, int ile);
-	void wiadomoscOZajeciuZasobow(int czas, int kto, int ile);
-	
+	void dostalWiadomosc();
+	void wyslalem();
+	//void zrabowalemICzekamNaWielblady(int czas, int ile);
+	//void skonczylemRabowac(int ile);
 private:
 	void zabierzWielblady(int ile);
 	bool sprobujZabracWielblady(int ile);

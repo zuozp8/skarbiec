@@ -6,7 +6,7 @@
 
 QMAKE_CFLAGS = $$system(mpicc --showme:compile)
 QMAKE_CXXFLAGS = $$system(mpic++ --showme:compile)
-QMAKE_LFLAGS = $$system(mpic++ --showme:link)
+QMAKE_LIBS = $$system(mpic++ --showme:link)
 
 QT       += core
 

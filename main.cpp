@@ -5,12 +5,12 @@
 #include "mainobject.hpp"
 
 
-int size, rank;
-
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
 	MPI_Init(&argc, &argv);
+
+	MainObject mainObject;
 
 	a.exec();
 	MPI_Finalize();

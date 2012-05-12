@@ -1,22 +1,24 @@
 #include "inputthread.hpp"
 #include <mpi/mpi.h>
+#include <iostream>
+
+int size, rank;
 
 InputThread::InputThread(QObject *parent) :
     QThread(parent)
 {
+	moveToThread(this);
 }
 
-int InputThread::exec()
+void InputThread::listen()
 {
-	int bufor[2];
-	MPI_Status status;
-	forever {
-		MPI_Recv(bufor, 3, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-		if (status.MPI_TAG == TAG_ZWALNIANIE_ZASOBOW) {
-			emit wiadomoscOZwolnieniuZasobow(bufor[0],status.MPI_SOURCE,bufor[1]);
-		} else {
-			emit wiadomoscOZajeciuZasobow(bufor[0],status.MPI_SOURCE,bufor[1]);
-		}
-	}
-	return 0;
+	MPI_Recv(bufor, 2, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+	quit();
+}
+
+void InputThread::run()
+{
+	QMetaObject::invokeMethod(this, "listen", Qt::QueuedConnection);
+
+	exec();
 }

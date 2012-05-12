@@ -10,11 +10,11 @@ public:
 	explicit OutputThread(QObject *parent = 0);
 	bool czyRabuje;
 signals:
-	
+	void wyslalem();
 public slots:
-
 protected:
-	int exec();
+	void run();
+	void timerEvent(QTimerEvent *);
 	
 };
 

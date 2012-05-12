@@ -13,6 +13,7 @@ MainObject::MainObject(QObject *parent) :
 		czas_odbierania[i] = (i==rank ? -1 : 0);
 	}
 
+	//std::cout << "Thread: " << QThread::currentThreadId() << std::endl << std::flush;
 	if (rank==0) {
 		std::cout<<"Podaj ilosc wileladow: "<< std::flush << std::flush;
 		std::cin>>ileWielbladow;
@@ -24,9 +25,12 @@ MainObject::MainObject(QObject *parent) :
 	//std::cout << "There are " << ileWielbladow << " camels " << std::endl;
 
 	inputThread = new InputThread;
-	connect(inputThread,SIGNAL(wiadomoscOZajeciuZasobow(int,int,int)),SLOT(wiadomoscOZajeciuZasobow(int,int,int)));
-	connect(inputThread,SIGNAL(wiadomoscOZwolnieniuZasobow(int,int,int)),SLOT(wiadomoscOZwolnieniuZasobow(int,int,int)));
+	connect(inputThread,SIGNAL(finished()),SLOT(dostalWiadomosc()),Qt::QueuedConnection);
+	inputThread->start();
 	outputThread = new OutputThread;
+	connect(outputThread,SIGNAL(wyslalem()),SLOT(wyslalem()),Qt::QueuedConnection);
+	connect(outputThread,SIGNAL(finished()),SLOT(dostalWiadomosc()),Qt::QueuedConnection);
+	outputThread->start();
 
 }
 
@@ -44,14 +48,15 @@ bool MainObject::sprobujZabracWielblady(int ile)
 	return false;
 }
 
-void MainObject::wiadomoscOZwolnieniuZasobow(int czas, int kto, int ile)
+void MainObject::dostalWiadomosc()
 {
-	std::cout << time(0) << "Ktoś zwolnił wielbłądy" << std::endl << std::flush;
+	std::cout<<rank<<'|'<<"Odebralem: czas="<<inputThread->bufor[0]<<" ile="<<inputThread->bufor[1]<<" od="<<inputThread->status.MPI_SOURCE<<" tag="<<inputThread->status.MPI_TAG<<std::endl;
+	inputThread->start();
 }
 
-void MainObject::wiadomoscOZajeciuZasobow(int czas, int kto, int ile)
+void MainObject::wyslalem()
 {
-	std::cout << time(0) << "Ktoś zajął wielbłądy" << std::endl << std::flush;
+	std::cout<< "Wyslalem" << std::endl << std::flush;
 }
 
 bool operator<(const Request& A, const Request& B) {
