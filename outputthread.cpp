@@ -29,7 +29,15 @@ void OutputThread::wyslij(int czas,int ileW, int odbiorca, int tag)
 	int bufor[2];
 	bufor[0] = czas;
 	bufor[1] = ileW;
-	MPI_Send(bufor, 2, MPI_INT, odbiorca, tag, MPI_COMM_WORLD);
+	if(odbiorca >= 0) MPI_Send(bufor, 2, MPI_INT, odbiorca, tag, MPI_COMM_WORLD);
+	else
+	{
+		for (int i=0; i<size; i++) {
+			if (i == rank) continue;
+			MPI_Send(bufor, 2, MPI_INT, i, tag, MPI_COMM_WORLD);
+			emit wyslalem();
+		}
+	}
 }
 
 
