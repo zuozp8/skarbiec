@@ -1,0 +1,43 @@
+class żądanie{
+	request_stamp, bandid_id, potrzebne_wielblady;
+};
+priority_queue<żądanie> kolejka;
+wolne_wieblady = k;
+zegar_lamporta = 0;
+czas_odebrania [ilosc_bandytow] = {0,0,0...};
+czas_odebrania[my_bandid_id] = inf;
+forever {
+	czekaj_az_zrabujesz_lub_odbierzesz_wiadomosc;
+	if (zrabowales) {
+		zegar_lamporta++;
+		wyslij_żądanie_do_wszystkich;
+		kolejka.push(zegar_lamporta, my_bandid_id, (zrabowane_skarby+1)/2);
+		przerwij_rabowanie;
+	} else if (odebrales_wiadomosc) {
+		czas_odebrania[wiadomosc.bandid_id] = wiadomosc.stamp;
+		zegar_lamporta = max(zegar_lamporta, wiadomosc.stamp);
+		if (wiadomosc.jest_o_zwolnieniu_zasobow) {
+			wolne_wielblady+=wiadomosc.zwalniane wielblady;
+			kolejka.pop();
+		} else if (wiadomosc.jest_o_zadaniu_zasobow) {
+			kolejka.push(wiadomosc.stamp, wiadomosc.bandid_id);
+			zegar_lamporta++;
+			wyslij_wiadomosc_potwierdzajaca_odebranie;
+		}
+	}
+	while (!kolejka.empty && wolne_wielblady >= potrzebne_wielblady && min[czas_odebrania]>kolejka.top.request_stamp) {
+		wolne_wielblady-=kolejka.top.potrzebne_wielblady;
+		if (kolejka.na_szczycie_moje_żądanie) {		
+			forever() {
+				czekaj_az_skonczysz_przewozic_lub_wiadomosc;
+				if (przyszla_wiadomosc)
+					(..)
+				else
+					break;
+				
+			}
+			wyslij_do_wszystkich_wiadomosc_o_zwolnieniu_zasobow;
+			wznow_rabowanie;
+		}
+	}
+}
