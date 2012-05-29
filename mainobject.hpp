@@ -27,12 +27,11 @@ signals:
 
 public slots:
 	void dostalWiadomosc();
-	void wyslalem();
 	//void zrabowalemICzekamNaWielblady(int czas, int ile);
+	void rabowanie();
 	void skonczylemRabowac();
 private:
 	int minimalnyCzasOdbioru();
-	void rabowanie();
 	void przetworzKolejke();
 	void zabierzWielblady(int ile);
 	bool sprobujZabracWielblady(int ile);

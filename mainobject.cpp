@@ -29,12 +29,12 @@ MainObject::MainObject(QObject *parent) :
 	connect(inputThread,SIGNAL(finished()),SLOT(dostalWiadomosc()),Qt::QueuedConnection);
 	inputThread->start();
 	outputThread = new OutputThread;
-	connect(outputThread,SIGNAL(wyslalem()),SLOT(wyslalem()),Qt::QueuedConnection);
 	connect(outputThread,SIGNAL(finished()),SLOT(dostalWiadomosc()),Qt::QueuedConnection);
 	connect(this,SIGNAL(wiadomosc(int,int,int,int)),outputThread,SLOT(wyslij(int,int,int,int)),Qt::QueuedConnection);
 	outputThread->start();
 
 	zegarLamporta = 0;
+	qsrand(rank);
 	QTimer::singleShot(500 + 500*(qrand()%20),this, SLOT(rabowanie()));
 
 }
@@ -50,7 +50,7 @@ void MainObject::rabowanie()
 
 void MainObject::dostalWiadomosc()
 {
-	//std::cout<<rank<<'|'<<"Odebralem: czas="<<inputThread->bufor[0]<<" ile="<<inputThread->bufor[1]<<" od="<<inputThread->status.MPI_SOURCE<<" tag="<<inputThread->status.MPI_TAG<<std::endl;
+	std::cout<<rank<<'|'<<"Odebralem:\tczas="<<inputThread->bufor[0]<<"\tile="<<inputThread->bufor[1]<<"\tod="<<inputThread->status.MPI_SOURCE<<"\ttag="<<TAG_TO_STRING(inputThread->status.MPI_TAG)<<std::endl;
 	this->czas_odbierania[inputThread->status.MPI_SOURCE] = inputThread->bufor[0];
 	zegarLamporta = qMax(zegarLamporta, inputThread->bufor[0]);
 	if(inputThread->status.MPI_TAG == TAG_ZWALNIANIE_ZASOBOW)
@@ -74,9 +74,10 @@ void MainObject::dostalWiadomosc()
 void MainObject::przetworzKolejke()
 {
 	qSort(kolejka.begin(),kolejka.end());
-	while( !kolejka.empty() && ileWielbladow >= kolejka.begin()->requestTime && minimalnyCzasOdbioru() > kolejka.begin()->requestTime )
+	while( !kolejka.empty() && ileWielbladow >= kolejka.begin()->ile && minimalnyCzasOdbioru() > kolejka.begin()->requestTime )
 	{
 		ileWielbladow -= kolejka.begin()->ile;
+		std::cout<<rank<<'|'<<"Obsłużyłem:\tczas="<<zegarLamporta<<"\tile="<<kolejka.begin()->ile<<"\tod="<<kolejka.begin()->banditId<<"\tcamel_left="<<ileWielbladow<<std::endl;
 		if(kolejka.begin()->banditId == rank)
 		{
 			QTimer::singleShot(500 + 500*(qrand()%20),this,SLOT(skonczylemRabowac()));
@@ -91,11 +92,6 @@ void MainObject::skonczylemRabowac()
 	wiadomosc(zegarLamporta ,potrzebneWielblady ,-1 ,TAG_ZWALNIANIE_ZASOBOW );
 	potrzebneWielblady = 0;
 	QTimer::singleShot(500 + 500*(qrand()%20),this, SLOT(rabowanie()));
-}
-
-void MainObject::wyslalem()
-{
-	std::cout<< "Wyslalem" << std::endl << std::flush;
 }
 
 void MainObject::zabierzWielblady(int ile)

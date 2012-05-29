@@ -8,6 +8,8 @@
 #define TAG_ZWALNIANIE_ZASOBOW 2
 #define TAG_POTWIERDZENIE_ODBIORU 3
 
+#define TAG_TO_STRING(x) ((x)==1?"ZAJMOWANIE":((x)==2?"ODDANIE":"POTWIERDZENIE"))
+
 extern int size, rank;
 
 class InputThread : public QThread
